@@ -5,27 +5,44 @@ let productsData = [{Size: 8, Color: 'Black'}, {Size: 7, Color: 'Blue'}, ];
 
 /* GET users listing. */
 router.get('/', (request, response) => {
-  console.log('first get request', request); 
-  console.log('first get response', response);
   return response.send(productsData);
 });
 
 //Object.values(users)
 
 router.get('/:productId', (request, response) => {
-  console.log('second get request.params,productID', request.params.productId);
-  return response.send(productsData[request.params.productId]); 
+  return response.send(productsData[request.params.productId-1]); 
 });
  
+
+
 router.post('/', (request, response) => {
-  console.log('post request', request); 
   const product = {
     Size: request.body.Size,
     Color: request.body.Color, 
   };
   productsData.push(product); 
-  console.log('post request.body', request.body)
-  return response.send('ok');
-}); 
+  return response.send('added');
+});
+
+
+
+router.put('/:productId', (request, response) => {
+  const product = {
+    Size: request.body.Size,
+    Color: request.body.Color, 
+  };
+  productsData[request.params.productId-1] = product; 
+  return response.send('updated');
+});
+ 
+
+
+router.delete('/:productId', (request, response) => {
+  console.log('productsData before splice', productsData); 
+  productsData.splice(request.params.productId-1, 1); 
+  console.log('productsData after splice', productsData); 
+  return response.send('deleted');
+});
 
 module.exports = router;
